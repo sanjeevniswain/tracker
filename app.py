@@ -42,25 +42,40 @@ if "user_id" not in st.session_state:
 
     col1, col2 = st.columns(2)
 
+    # ---------- LOGIN ----------
     with col1:
         if st.button("Login"):
-            user_id = login_user(username, password)
-            if user_id:
-                st.session_state.user_id = user_id
-                st.session_state.username = username
-                st.success("Logged in successfully ❤️")
-                st.rerun()
+            if not username.strip() or not password.strip():
+                st.error("❌ Please enter both username and password")
             else:
-                st.error("Invalid username or password")
+                user_id = login_user(username.strip(), password)
+                if user_id:
+                    st.session_state.user_id = user_id
+                    st.session_state.username = username.strip()
+                    st.success("Logged in successfully ❤️")
+                    st.rerun()
+                else:
+                    st.error("❌ Invalid username or password")
 
+    # ---------- REGISTER ----------
     with col2:
         if st.button("Register"):
-            try:
-                register_user(username, password)
-                st.success("Registered successfully! Please login.")
-            except Exception as e:
-                st.error("Registration failed")
-                st.exception(e)
+            if not username.strip():
+                st.error("❌ Username cannot be empty")
+            elif not password.strip():
+                st.error("❌ Password cannot be empty")
+            elif len(password) < 4:
+                st.error("❌ Password must be at least 4 characters")
+            else:
+                try:
+                    register_user(username.strip(), password)
+                    st.success("✅ Registered successfully! Please login.")
+                except Exception as e:
+                    if "UNIQUE constraint failed" in str(e):
+                        st.error("❌ Username already exists")
+                    else:
+                        st.error("❌ Registration failed")
+                        st.exception(e)
 
 # -----------------------------
 # MAIN APP (LOGGED IN)
@@ -111,7 +126,7 @@ else:
         st.exception(e)
 
     # -----------------------------
-    # AI VOCAB (STATIC FOR NOW)
+    # VOCAB (STATIC)
     # -----------------------------
     st.divider()
     st.header("🧠 Word of the Day")
@@ -140,6 +155,3 @@ else:
     if st.button("🚪 Logout"):
         st.session_state.clear()
         st.rerun()
-
-
-
