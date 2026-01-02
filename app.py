@@ -4,6 +4,7 @@ from database import create_tables
 from auth import login_user, register_user
 from habits import save_log, get_streaks
 from ai_vocab import get_vocab
+st.write("DEBUG: app.py started")
 
 st.set_page_config(page_title="Daily Routine Tracker ❤️", layout="centered")
 create_tables()
@@ -73,3 +74,4 @@ else:
     **Meaning:** {meaning}  
     _Example:_ {example}
     """)
+
