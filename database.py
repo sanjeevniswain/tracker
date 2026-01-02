@@ -1,7 +1,7 @@
 import sqlite3
 
 def get_db():
-    return sqlite3.connect("tracker.db", check_same_thread=False)
+    return sqlite3.connect("/tmp/tracker.db", check_same_thread=False)
 
 def create_tables():
     conn = get_db()
@@ -28,3 +28,4 @@ def create_tables():
     """)
 
     conn.commit()
+
